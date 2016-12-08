@@ -28,11 +28,27 @@ def get_other_sum(dimensions):
 
     return other_sum
 
-with open('day_3_input.txt') as f:
-    triangles = f.readlines()
-    for i in range(len(triangles)):
-        triangles[i] = triangles[i][:-1].strip().split()
-        for j in range(len(triangles[i])):
-            triangles[i][j] = int(triangles[i][j])
+def get_triangles_by_column(data):
+    triangles = []
+    for i in range(0, len(data), 3):
+        temp = []
+        for j in range(3):
+            temp.append(data[i][j])
+            temp.append(data[i + 1][j])
+            temp.append(data[i + 2][j])
+            triangles.append(temp)
+            temp = []
 
-print count_valid_triangles(triangles)
+    return triangles
+
+with open('day_3_input.txt') as f:
+    data = f.readlines()
+    for i in range(len(data)):
+        data[i] = data[i][:-1].strip().split()
+        for j in range(len(data[i])):
+            data[i][j] = int(data[i][j])
+
+print count_valid_triangles(data)
+
+vertical_triangles = get_triangles_by_column(data)
+print count_valid_triangles(vertical_triangles)
