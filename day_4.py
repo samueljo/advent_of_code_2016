@@ -1,3 +1,31 @@
+def get_decrypted_rooms(rooms):
+    real_rooms = get_real_rooms(rooms)
+    decrypted_rooms = []
+    for room in real_rooms:
+        decrypted_rooms.append(decrypt(room))
+
+    return decrypted_rooms
+
+def decrypt(room):
+    encrypted_name = room.split('-')[:-1]
+    decrypted_name = ''
+    sector_id = int(room.split('-')[-1][:-7])
+
+    for el in encrypted_name:
+        for i in range(len(el)):
+            decrypted_name += shift_cipher(el[i], sector_id)
+
+        decrypted_name += ' '
+
+    decrypted_name.strip()
+
+    return [decrypted_name, sector_id]
+
+def shift_cipher(letter, shift):
+    letter_num = ord(letter) - 97 + shift
+    letter_num = (letter_num % 26) + 97
+    return chr(letter_num)
+
 def sum_sector_ids(rooms):
     real_rooms = get_real_rooms(rooms)
     total_sum = 0
@@ -70,3 +98,4 @@ for i in range(len(rooms)):
     rooms[i] = rooms[i][:-1]
 
 print sum_sector_ids(rooms)
+print get_decrypted_rooms(rooms)
