@@ -14,7 +14,7 @@ def repetition_code(corrupt_code):
                 repetition_count[i][current_el] = 1
 
     for i in repetition_count.keys():
-        temp = sorted(repetition_count[i].items(), key=lambda x: x[1], reverse=True)[0]
+        temp = sorted(repetition_count[i].items(), key=lambda x: x[1])[0]
         code += temp[0]
 
     return code
