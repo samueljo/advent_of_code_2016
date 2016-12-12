@@ -1,10 +1,3 @@
-def has_abba(str):
-    for i in range(len(str) - 3):
-        if str[i] != str[i + 1] and str[i] == str[i + 3] and str[i + 1] == str[i + 2]:
-            return True
-
-    return False
-
 def parse_line(line):
     non_bracket = []
     nb_str = ''
@@ -35,6 +28,13 @@ def parse_line(line):
 
     return [non_bracket, bracket]
 
+def has_abba(str):
+    for i in range(len(str) - 3):
+        if str[i] != str[i + 1] and str[i] == str[i + 3] and str[i + 1] == str[i + 2]:
+            return True
+
+    return False
+
 def supports_tls(ip):
     non_bracket_abba = False
     bracket_abba = False
@@ -51,7 +51,7 @@ def supports_tls(ip):
 
     return non_bracket_abba and not bracket_abba
 
-def count_supported_ips(puzzle_input):
+def count_supported_tls_ips(puzzle_input):
     count = 0
     parsed_ips = []
     for i in puzzle_input:
@@ -63,10 +63,50 @@ def count_supported_ips(puzzle_input):
 
     return count
 
+def get_babs(str):
+    babs = set()
+    for i in range(len(str) - 2):
+        if str[i] != str[i + 1] and str[i] == str[i + 2]:
+            bab = str[i + 1] + str[i] + str[i + 1]
+            babs.add(bab)
+
+    return babs
+
+def has_bab(str, all_babs):
+    for i in range(len(str) - 2):
+        if str[i:i + 3] in all_babs:
+            return True
+
+    return False
+
+def supports_ssl(ip):
+    all_babs = set()
+    for i in ip[0]:
+        all_babs = all_babs | get_babs(i)
+
+    for i in ip[1]:
+        if has_bab(i, all_babs):
+            return True
+
+    return False
+
+def count_supported_ssl_ips(puzzle_input):
+    count = 0
+    parsed_ips = []
+    for i in puzzle_input:
+        parsed_ips.append(parse_line(i))
+
+    for ip in parsed_ips:
+        if supports_ssl(ip):
+            count += 1
+
+    return count
+
 f = open('day_7_input.txt')
 puzzle_input = f.readlines()
 
 for i in range(len(puzzle_input)):
     puzzle_input[i] = puzzle_input[i][:-1]
 
-print count_supported_ips(puzzle_input)
+print count_supported_tls_ips(puzzle_input)
+print count_supported_ssl_ips(puzzle_input)
